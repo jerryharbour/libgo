@@ -13,6 +13,10 @@ type FileSystem struct {
 	Fser
 }
 
+func NewFileSystem() *FileSystem {
+	return &FileSystem{}
+}
+
 func (f FileSystem) ReadDir(dirname string) ([]os.FileInfo, error) {
 	return ReadDir(f.Fser, dirname)
 }
