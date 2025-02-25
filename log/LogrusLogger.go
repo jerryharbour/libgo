@@ -28,19 +28,20 @@ func NewLogrusLoggerWithLevel(level LogLevel) *LogrusLogger {
 	return l
 }
 
-func (l *LogrusLogger) Configure(conf *LogConf) error {
+func (l *LogrusLogger) Configure(conf *LogConf) {
 	// set log level
 	l.setLevel(conf.Level)
 
 	// set log format
 	formatter := new(logrus.TextFormatter)
+	formatter.TimestampFormat = "2006-01-02 15:04:05.000"
 	formatter.FullTimestamp = true
-	formatter.Caller = true
 	l.logger.SetFormatter(formatter)
+	//l.logger.SetReportCaller(true)
 
 	// set log rollback
 	if conf.LogPath == "" {
-		conf.LogPath = "./"
+		conf.LogPath = "./log/"
 	}
 
 	if conf.LogFile == "" {
@@ -54,9 +55,40 @@ func (l *LogrusLogger) Configure(conf *LogConf) error {
 		MaxAge:     30,
 		Compress:   conf.Compress,
 	}
-	l.logger.AddHook(logrus.NewFileHook(logFile))
+	l.logger.SetOutput(logFile)
 
-	return nil
+}
+
+func (l *LogrusLogger) Debug(args ...interface{}) {
+	l.logger.Debug(args...)
+}
+
+func (l *LogrusLogger) Info(args ...interface{}) {
+	l.logger.Info(args...)
+}
+
+func (l *LogrusLogger) Warn(args ...interface{}) {
+	l.logger.Warn(args...)
+}
+
+func (l *LogrusLogger) Error(args ...interface{}) {
+	l.logger.Error(args...)
+}
+
+func (l *LogrusLogger) DebugF(format string, args ...interface{}) {
+	l.logger.Debugf(format, args...)
+}
+
+func (l *LogrusLogger) InfoF(format string, args ...interface{}) {
+	l.logger.Infof(format, args...)
+}
+
+func (l *LogrusLogger) WarnF(format string, args ...interface{}) {
+	l.logger.Warnf(format, args...)
+}
+
+func (l *LogrusLogger) ErrorF(format string, args ...interface{}) {
+	l.logger.Errorf(format, args...)
 }
 
 func (l *LogrusLogger) setLevel(level LogLevel) {

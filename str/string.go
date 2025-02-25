@@ -221,6 +221,15 @@ func TrimRight(str string, cutstr string) string {
 	return strings.TrimRight(str, cutstr)
 }
 
+func TrimBfLastChar(str string, ch string) string {
+	idx := strings.LastIndex(str, ch)
+	if idx == -1 {
+		return ""
+	}
+
+	return str[idx+1:]
+}
+
 func IntToString(i int) string {
 	return strconv.Itoa(i)
 }
