@@ -10,7 +10,7 @@ type Stack[T DStructElemType] struct {
 	lock *sync.Mutex
 }
 
-func NewStack[T DStructElemType](threadSafe bool) *Stack[T] {
+func newStack[T DStructElemType](threadSafe bool) *Stack[T] {
 	s := &Stack[T]{
 		data: make([]T, 0),
 		len:  0,
@@ -22,6 +22,14 @@ func NewStack[T DStructElemType](threadSafe bool) *Stack[T] {
 	}
 
 	return s
+}
+
+func NewStack[T DStructElemType]() *Stack[T] {
+	return newStack[T](false)
+}
+
+func NewSafeStack[T DStructElemType]() *Stack[T] {
+	return newStack[T](true)
 }
 
 func (s *Stack[T]) Push(elem T) {
@@ -73,6 +81,20 @@ func (s *Stack[T]) Peek() (T, bool) {
 	}
 
 	return s.data[s.len-1], true
+}
+
+func (s *Stack[T]) PeekIdx(idx int) (T, bool) {
+	if s.lock != nil {
+		s.lock.Lock()
+		defer s.lock.Unlock()
+	}
+
+	if idx < 0 || idx >= s.len {
+		var zero T
+		return zero, false
+	}
+
+	return s.data[idx], true
 }
 
 func (s *Stack[T]) IsEmpty() bool {

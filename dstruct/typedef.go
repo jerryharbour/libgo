@@ -13,5 +13,5 @@ type Float interface {
 }
 
 type DStructElemType interface {
-	Int | UInit | Float | string
+	any
 }
