@@ -5,7 +5,7 @@ import (
 )
 
 func TestIntStack(t *testing.T) {
-	stack := NewStack[int](true)
+	stack := NewSafeStack[int]()
 	if stack.Size() != 0 {
 		t.Errorf("stack size[%d] is not equal 0", stack.Size())
 	}
@@ -57,7 +57,7 @@ func TestIntStack(t *testing.T) {
 }
 
 func TestStringStack(t *testing.T) {
-	stack := NewStack[string](false)
+	stack := NewStack[string]()
 	if stack.Size() != 0 {
 		t.Errorf("stack size[%d] is not equal 0", stack.Size())
 	}
